@@ -20,17 +20,20 @@ idx = pd.IndexSlice
 
 data=get_and_process_covid_data_it(pd.Timestamp.today())
 
-
+days= data.loc[idx["Italia"]].index
 cases = data.loc[idx["Italia"], "positive"]
-days = [i for i in range(len(cases))]
 
 fig,ax1 = plt.subplots()
+
 
 ax1.plot(days, cases,'o', markersize=1, label="Casi Covid Italia")
 plt.legend(loc="upper left")
 plt.xlabel('Giorni')
+plt.xticks(rotation=45)
 plt.ylabel('Casi Giornalieri')
-plt.savefig('/home/fabio/CovidAnalysisBot/Grafici/casi.png')
+plt.grid(axis="y",linestyle='-', linewidth=1)
+plt.savefig('/home/fabio/CovidAnalysisBot/Grafici/casi.png', dpi=399)
+#plt.show()
 
 #Telegram
 def report():
@@ -38,17 +41,16 @@ def report():
     bot.sendPhoto(405229696, photo=open('/home/fabio/CovidAnalysisBot/Grafici/casi.png', 'rb'))
     #bot.sendDocument(405229696, document=open('Covid/casi.pdf', 'rb'))
     new_cases = cases[len(cases)-1];
-    print(new_cases)
-    bot.sendMessage(405229696, "Ci sono " + str(new_cases) + "nuovi casi di Covid-19")
+    #print(new_cases)
+    bot.sendMessage(405229696, "Ci sono " + str(new_cases) + " nuovi casi di Covid-19")
     
 
 
-
-#schedule.every().day.at("17:01").do(report)
 report()
-while True:
-    schedule.run_pending()
-    time.sleep(1)
+#schedule.every().day.at("17:01").do(report)
+#while True:
+   # schedule.run_pending()
+    #time.sleep(1)
 
 
 
