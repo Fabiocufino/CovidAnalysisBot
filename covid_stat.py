@@ -33,12 +33,12 @@ plt.xticks(rotation=45)
 plt.ylabel('Casi Giornalieri')
 plt.grid(axis="y",linestyle='-', linewidth=1)
 plt.savefig('/home/fabio/CovidAnalysisBot/Grafici/casi.png', dpi=399)
-#plt.show()
+plt.show()
 
 #Telegram
 def report():
     bot = telepot.Bot('5023870649:AAGSGZaOQMzkGx43o1G0yP888-iDN-vzut0')
-    bot.sendPhoto(405229696, photo=open('/home/fabio/CovidAnalysisBot/Grafici/casi.png', 'rb'))
+    #bot.sendPhoto(405229696, photo=open('/home/fabio/CovidAnalysisBot/Grafici/casi.png', 'rb'))
     #bot.sendDocument(405229696, document=open('Covid/casi.pdf', 'rb'))
     new_cases = cases[len(cases)-1];
     #print(new_cases)
@@ -49,8 +49,8 @@ def report():
 report()
 #schedule.every().day.at("17:01").do(report)
 #while True:
-   # schedule.run_pending()
-    #time.sleep(1)
+#    schedule.run_pending()
+#    time.sleep(1)
 
 
 
