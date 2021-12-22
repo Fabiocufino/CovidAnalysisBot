@@ -23,25 +23,31 @@ fig,ax = plt.subplots()
 days=region_data.index
 val_rt=region_data["ML"]
 ax.plot(days, val_rt,label="Indice Rt italia" )
-plt.legend(loc="upper right")
+
 plt.xlabel('Giorni')
-plt.xticks(rotation=45)
 plt.ylabel('R_t')
 plt.grid(axis="y",linestyle='--', linewidth=1)
+plt.xticks(rotation=35)
+xtick_loc=[i for i in range(len(days)-1) if(i%15==0)]
+xtick_loc.append(len(days)-1)
+ax.set_xticks(xtick_loc)
 
 
+plt.xlim(len(days)-100,len(days)-1)
+plt.ylim(0.3,1.8)
 
 Low_95_val_rt=region_data["Low_95"]
 High_95_val_rt=region_data["High_95"]
-plt.fill_between(days,Low_95_val_rt, High_95_val_rt, color='green', alpha=0.2)
+plt.fill_between(days,Low_95_val_rt, High_95_val_rt, color='green', alpha=0.1,label="95% conf.")
 
 Low_90_val_rt=region_data["Low_90"]
 High_90_val_rt=region_data["High_90"]
-plt.fill_between(days,Low_90_val_rt, High_90_val_rt, color='red', alpha=0.2)
+plt.fill_between(days,Low_90_val_rt, High_90_val_rt, color='yellow', alpha=0.2,label="90% conf.")
 
 Low_50_val_rt=region_data["Low_50"]
 High_50_val_rt=region_data["High_50"]
-plt.fill_between(days,Low_50_val_rt, High_50_val_rt, color='yellow', alpha=0.2)
+plt.fill_between(days,Low_50_val_rt, High_50_val_rt, color='red', alpha=0.2,label="50% conf.")
 
-print(all_data)
-plt.show()
+plt.legend(loc="upper left")
+fig.tight_layout() #Serve er far veere tutta la igura senza assi tagliati
+plt.savefig('/home/fabio/CovidAnalysisBot/Grafici/Rt.png', dpi=399)
