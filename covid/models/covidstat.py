@@ -4,9 +4,9 @@ import scipy.stats
 import concurrent.futures
 
 class covidstat():
-    def __init__(self, data, regions):
+    def __init__(self, data, region):
         self.data=data
-        self.regions=regions
+        self.region=region
         self.SHAPE = 1.87
         self.SCALE = 3.57
         self.INTERVAL = 14
@@ -55,11 +55,4 @@ class covidstat():
         print(region)
         return df;
             
-    def run(self):
-        # Create output DataFrame
-        all_output = pd.DataFrame(columns=['data','Rt','High_68','Low_68','High_95','Low_95'])
-        with concurrent.futures.ProcessPoolExecutor() as executor:
-            res = executor.map(self.run_region, self.regions)
-            for dd in list(res):
-                all_output = all_output.append(dd, ignore_index=True)
-        return all_output
+

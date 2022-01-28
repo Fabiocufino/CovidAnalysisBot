@@ -1,57 +1,55 @@
 import time
 from covid.data_it import get_and_process_covid_data_it
 import schedule
-import requests
 import telepot
 import csv
 import matplotlib.pyplot as plt
 import numpy as np
 import requests
 import pandas as pd
-import time
-import pandas as pd
-import numpy as np
 
 # Dataset
 from covid.data import get_data
-# Models
-from covid.models.bettencourt_ribeiro import bettencourt_ribeiro
+
+from covid.data_it import (
+    get_and_process_covid_data_it,
+    get_raw_covid_data_it,
+    process_covid_data_it,
+)
 idx = pd.IndexSlice
-
-data=get_and_process_covid_data_it(pd.Timestamp.today())
-
-days= data.loc[idx["Italia"]].index
-cases = data.loc[idx["Italia"], "positive"]
-
-fig,ax1 = plt.subplots()
-
-
-ax1.plot(days, cases,'o', markersize=1, label="Casi Covid Italia")
-plt.legend(loc="upper left")
-plt.xlabel('Giorni')
-plt.xticks(rotation=45)
-plt.ylabel('Casi Giornalieri')
-plt.grid(axis="y",linestyle='-', linewidth=1)
-plt.savefig('/home/fabio/CovidAnalysisBot/Grafici/casi.png', dpi=399)
-#plt.show()
-
-#Telegram
-def report():
-    bot = telepot.Bot('5023870649:AAGSGZaOQMzkGx43o1G0yP888-iDN-vzut0')
-    bot.sendPhoto(405229696, photo=open('/home/fabio/CovidAnalysisBot/Grafici/casi.png', 'rb'))
-    #bot.sendDocument(405229696, document=open('Covid/casi.pdf', 'rb'))
-    new_cases = cases[len(cases)-1];
-    bot.sendMessage(405229696, "Ci sono " + str(new_cases) + " nuovi casi di Covid-19")
-
-    bot.sendPhoto(405229696, photo=open('/home/fabio/CovidAnalysisBot/Grafici/Rt.png', 'rb'))
     
+def plot_cases():
+    #(START) GET DATA FOR CASES GRAPH
+    data=get_and_process_covid_data_it(pd.Timestamp.today())
+
+    days= data.loc[idx["Italia"]].index
+    cases = data.loc[idx["Italia"], "positive"]
+    dead=data.loc[idx["Italia"], "dead"] 
+    #(END)
 
 
-report()
-#schedule.every().day.at("17:01").do(report)
-#while True:
-#    schedule.run_pending()
-#    time.sleep(1)
+    #(START) GENERETE CASES GRAPH
+    fig, ax1 = plt.subplots(2, 1)
+    ax1[0].plot(days, cases,'o', markersize=1, label="Casi Covid Italia")
+    ax1[0].set_ylabel('Daily Cases')
+    ax1[0].grid(axis="y",linestyle='--', linewidth=1) 
+    ax1[0].legend(["Casi Covid Italia"],loc="upper left")
+    ax1[0].axes.get_xaxis().set_visible(False)
+
+
+    ax1[1].plot(days, dead,'o', markersize=1, label="Casi Covid Italia", color="red")
+    ax1[1].set_ylabel('Daily Dead')
+    ax1[1].grid(axis="y",linestyle='--', linewidth=1)
+    ax1[1].legend(["Morti Covid Italia"],loc="upper right")
+
+
+
+    plt.xticks(rotation=45)
+    fig.set_size_inches(10.5, 7, forward=True)
+    fig.tight_layout() #Serve er far veere tutta la igura senza assi tagliati
+    plt.savefig('/home/fabio/CovidAnalysisBot/Grafici/casi.png', dpi=399)
+    #(END)
+
 
 
 

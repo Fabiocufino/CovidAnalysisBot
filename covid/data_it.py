@@ -19,9 +19,10 @@ def process_covid_data_it(data: pd.DataFrame, run_date: pd.Timestamp):
     data = data.rename(columns={"denominazione_regione": "region"})
     data = data.rename(columns={"totale_casi": "positive"})
     data = data.rename(columns={"tamponi": "total"})
+    data = data.rename(columns={"deceduti": "dead"})
     data["date"] = pd.to_datetime(data["data"], format="%Y-%m-%d").dt.date
     data = data.set_index(["region", "date"]).sort_index()
-    data = data[["positive", "total"]]
+    data = data[["positive", "total", "dead"]]
     data = data.astype(float)
     
     # Data Clean
@@ -198,6 +199,7 @@ def process_covid_data_it(data: pd.DataFrame, run_date: pd.Timestamp):
     trentino_alto_adige = pd.DataFrame(index=trentino_alto_adige_index).sort_index()
     trentino_alto_adige["positive"] = data.loc["P.A. Trento"]["positive"].values + data.loc["P.A. Bolzano"]["positive"].values
     trentino_alto_adige["total"] = data.loc["P.A. Trento"]["total"].values + data.loc["P.A. Bolzano"]["total"].values
+    trentino_alto_adige["dead"] = data.loc["P.A. Trento"]["dead"].values + data.loc["P.A. Bolzano"]["dead"].values
     data = data.append(trentino_alto_adige)
     
     # Add - Nord Italia
@@ -205,6 +207,7 @@ def process_covid_data_it(data: pd.DataFrame, run_date: pd.Timestamp):
     nord_italia = pd.DataFrame(index=nord_italia_index).sort_index()
     nord_italia["positive"] = data.loc["Valle d\'Aosta"]["positive"].values + data.loc["Piemonte"]["positive"].values + data.loc["Liguria"]["positive"].values + data.loc["Lombardia"]["positive"].values + data.loc["P.A. Trento"]["positive"].values + data.loc["P.A. Bolzano"]["positive"].values + data.loc["Veneto"]["positive"].values + data.loc["Friuli Venezia Giulia"]["positive"].values + data.loc["Emilia-Romagna"]["positive"].values
     nord_italia["total"] = data.loc["Valle d\'Aosta"]["total"].values + data.loc["Piemonte"]["total"].values + data.loc["Liguria"]["total"].values + data.loc["Lombardia"]["total"].values + data.loc["P.A. Trento"]["total"].values + data.loc["P.A. Bolzano"]["total"].values + data.loc["Veneto"]["total"].values + data.loc["Friuli Venezia Giulia"]["total"].values + data.loc["Emilia-Romagna"]["total"].values
+    nord_italia["dead"] = data.loc["Valle d\'Aosta"]["dead"].values + data.loc["Piemonte"]["dead"].values + data.loc["Liguria"]["dead"].values + data.loc["Lombardia"]["dead"].values + data.loc["P.A. Trento"]["dead"].values + data.loc["P.A. Bolzano"]["dead"].values + data.loc["Veneto"]["dead"].values + data.loc["Friuli Venezia Giulia"]["dead"].values + data.loc["Emilia-Romagna"]["dead"].values
     data = data.append(nord_italia)
     
     # Add - Centro Italia
@@ -212,6 +215,7 @@ def process_covid_data_it(data: pd.DataFrame, run_date: pd.Timestamp):
     centro_italia = pd.DataFrame(index=centro_italia_index).sort_index()
     centro_italia["positive"] = data.loc["Toscana"]["positive"].values + data.loc["Marche"]["positive"].values + data.loc["Umbria"]["positive"].values + data.loc["Lazio"]["positive"].values
     centro_italia["total"] = data.loc["Toscana"]["total"].values + data.loc["Marche"]["total"].values + data.loc["Umbria"]["total"].values + data.loc["Lazio"]["total"].values
+    centro_italia["dead"] = data.loc["Toscana"]["dead"].values + data.loc["Marche"]["dead"].values + data.loc["Umbria"]["dead"].values + data.loc["Lazio"]["dead"].values
     data = data.append(centro_italia)
     
     # Add - Sud Italia
@@ -219,6 +223,7 @@ def process_covid_data_it(data: pd.DataFrame, run_date: pd.Timestamp):
     sud_italia = pd.DataFrame(index=sud_italia_index).sort_index()
     sud_italia["positive"] = data.loc["Abruzzo"]["positive"].values + data.loc["Molise"]["positive"].values + data.loc["Campania"]["positive"].values + data.loc["Basilicata"]["positive"].values + data.loc["Puglia"]["positive"].values + data.loc["Calabria"]["positive"].values + data.loc["Sicilia"]["positive"].values + data.loc["Sardegna"]["positive"].values
     sud_italia["total"] = data.loc["Abruzzo"]["total"].values + data.loc["Molise"]["total"].values + data.loc["Campania"]["total"].values + data.loc["Basilicata"]["total"].values + data.loc["Puglia"]["total"].values + data.loc["Calabria"]["total"].values + data.loc["Sicilia"]["total"].values + data.loc["Sardegna"]["total"].values
+    sud_italia["dead"] = data.loc["Abruzzo"]["dead"].values + data.loc["Molise"]["dead"].values + data.loc["Campania"]["dead"].values + data.loc["Basilicata"]["dead"].values + data.loc["Puglia"]["dead"].values + data.loc["Calabria"]["dead"].values + data.loc["Sicilia"]["dead"].values + data.loc["Sardegna"]["dead"].values
     data = data.append(sud_italia)
     
     # Add - Italia
@@ -226,13 +231,14 @@ def process_covid_data_it(data: pd.DataFrame, run_date: pd.Timestamp):
     italia = pd.DataFrame(index=italia_index).sort_index()
     italia["positive"] = data.loc["Nord Italia"]["positive"].values + data.loc["Centro Italia"]["positive"].values + data.loc["Sud Italia"]["positive"].values
     italia["total"] = data.loc["Nord Italia"]["total"].values + data.loc["Centro Italia"]["total"].values + data.loc["Sud Italia"]["total"].values
+    italia["dead"] = data.loc["Nord Italia"]["dead"].values + data.loc["Centro Italia"]["dead"].values + data.loc["Sud Italia"]["dead"].values
     data = data.append(italia)
     
     all_cases = data['positive']
     data = data.diff().fillna(0).clip(0, None).sort_index()
     data['all_cases'] = all_cases
     
-    return data.loc[idx[:, :run_date], ["positive", "total", "all_cases"]]
+    return data.loc[idx[:, :run_date], ["positive", "total", "dead", "all_cases"]]
     return data
 
 
