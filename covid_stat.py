@@ -1,4 +1,5 @@
 import time
+from unittest import case
 from covid.data_it import get_and_process_covid_data_it
 import schedule
 import telepot
@@ -30,7 +31,16 @@ def plot_cases():
 
     #(START) GENERETE CASES GRAPH
     fig, ax1 = plt.subplots(2, 1)
+
     ax1[0].plot(days, cases,'o', markersize=1, label="Casi Covid Italia")
+
+    #faccio la media settimanale dei casi
+    mean=[]
+    for i in range(len(cases)):
+        mean.append(np.mean(cases[i:i+7]))
+        
+    ax1[0].plot(days,mean, "g" ,linewidth=0.7 , label="Media Settimanale")
+
     ax1[0].set_ylabel('Daily Cases')
     ax1[0].grid(axis="y",linestyle='--', linewidth=1) 
     ax1[0].legend(["Casi Covid Italia"],loc="upper left")

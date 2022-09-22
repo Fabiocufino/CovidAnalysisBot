@@ -21,18 +21,16 @@ def compute_and_send(data: pd.DataFrame):
     bot = telepot.Bot('5023870649:AAGSGZaOQMzkGx43o1G0yP888-iDN-vzut0')
 
 
-    bot.sendMessage(-1001578600515, "Andamento Positivi: ")
-    bot.sendPhoto(-1001578600515, photo=open('/home/fabio/CovidAnalysisBot/Grafici/casi.png', 'rb'))
-
-    bot.sendMessage(-1001578600515, "Andamento Rt: ")
-    bot.sendPhoto(-1001578600515, photo=open('/home/fabio/CovidAnalysisBot/Grafici/Rt.png', 'rb'))
-
-    #new_cases = cases[len(cases)-1];
-    bot.sendMessage(-1001578600515, "Nuovi casi di Covid-19: "        + str(data.loc[idx["Italia"], "positive"][-1]) + "\n"
+    bot.sendMessage(405229696, "Andamento Positivi: ")
+    bot.sendPhoto(405229696, photo=open('/home/fabio/CovidAnalysisBot/Grafici/casi.png', 'rb'))
+    bot.sendMessage(405229696, "Andamento Rt: ")
+    bot.sendPhoto(405229696, photo=open('/home/fabio/CovidAnalysisBot/Grafici/Rt.png', 'rb'))
+    bot.sendMessage(405229696, "Nuovi casi di Covid-19: "        + str(data.loc[idx["Italia"], "positive"][-1]) + "\n"
                                    "Numero Tamponi Effettuati: " + str(data.loc[idx["Italia"], "total"][-1]) + "\n"
                                    "Deceduti: "                  + str(data.loc[idx["Italia"], "dead"][-1]) + "\n")
 
-#schedule.every().day.at("18:01").do(compute_and_send)
+
+
 
 import datetime
 
