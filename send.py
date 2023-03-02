@@ -18,7 +18,7 @@ def compute_and_send(data: pd.DataFrame):
     #Telegram
     # Se vuoi mandare messaggi solo al bot usa chat_id=405229696, altrimenti al gruppo chat_id=-1001578600515
     #bot.sendDocument(405229696, document=open('Covid/casi.pdf', 'rb'))
-    bot = telepot.Bot('5023870649:AAGSGZaOQMzkGx43o1G0yP888-iDN-vzut0')
+    bot = telepot.Bot('5023870649:AAGSGZaOQMzkGx43o1G0yP888-iDN-vzut0') #io il token lo metterei in un file che non viene caricato su gh
 
 
     bot.sendMessage(405229696, "Andamento Positivi: ")
